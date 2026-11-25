@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAFIA ONLINE</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090b12;color:white;
+ font-family:Arial,sans-serif;text-align:center;
+ min-height:100vh;
+}
+header{padding:30px 15px;background:linear-gradient(135deg,#350b16,#101522)}
+h1{color:#ff334d;font-size:36px;margin:5px}
+header p{color:#bbb}
+main{max-width:440px;margin:30px auto;padding:15px}
+.card{
+ background:#151a27;border:1px solid #30384b;
+ border-radius:18px;padding:22px;margin-bottom:18px;
+}
+input{
+ width:100%;padding:14px;margin:8px 0;
+ border:1px solid #444c60;border-radius:10px;
+ background:#0b101a;color:white;font-size:16px;
+}
+button{
+ width:100%;padding:14px;margin-top:10px;
+ border:0;border-radius:10px;
+ background:#c9233d;color:white;
+ font-size:17px;font-weight:bold;cursor:pointer;
+}
+button:hover{background:#ed304e}
+.secondary{background:#293449}
+#lobby{display:none}
+.player{
+ background:#222b3c;padding:12px;border-radius:9px;
+ margin:8px 0;text-align:right
+}
+small{color:#aaa}
+</style>
+</head>
+<body>
+<header>
+<h1>🔪 MAFIA ONLINE</h1>
+<p>ثق بأصدقائك... لكن ليس كثيراً!</p>
+</header>
+
+<main>
+<section class="card" id="home">
+<h2>🎮 ابدأ اللعب</h2>
+<input id="name" placeholder="اكتب اسمك">
+<button onclick="createRoom()">إنشاء غرفة جديدة</button>
+<hr style="border-color:#30384b;margin:22px 0">
+<input id="roomCode" placeholder="أدخل رمز الغرفة">
+<button class="secondary" onclick="joinRoom()">انضم إلى غرفة</button>
+</section>
+
+<section class="card" id="lobby">
+<h2>🏠 غرفة اللعب</h2>
+<p>رمز الغرفة:</p>
+<h1 id="code"></h1>
+<button class="secondary" onclick="copyCode()">نسخ رمز الغرفة</button>
+<h3>👥 اللاعبون</h3>
+<div id="players"></div>
+<p><small>الحد الأقصى 10 لاعبين</small></p>
+<button onclick="addPlayer()">إضافة لاعب تجريبي</button>
+</section>
+</main>
+
+<script>
+let room = "";
+let players = [];
+
+function createRoom(){
+ const name=document.getElementById("name").value.trim();
+ if(!name){alert("اكتب اسمك أولاً");return}
+ room=Math.random().toString(36).substring(2,8).toUpperCase();
+ players=[name];
+ showLobby();
+}
+
+function joinRoom(){
+ const name=document.getElementById("name").value.trim();
+ const code=document.getElementById("roomCode").value.trim().toUpperCase();
+ if(!name||!code){alert("اكتب اسمك ورمز الغرفة");return}
+ alert("هذه نسخة تجريبية. الانضمام عبر الإنترنت سنضيفه في الخطوة القادمة.");
+}
+
+function showLobby(){
+ document.getElementById("home").style.display="none";
+ document.getElementById("lobby").style.display="block";
+ document.getElementById("code").textContent=room;
+ renderPlayers();
+}
+
+function renderPlayers(){
+ document.getElementById("players").innerHTML=players.map((p,i)=>
+ `<div class="player">👤 ${i+1}. ${p}</div>`
+ ).join("");
+}
+
+function addPlayer(){
+ if(players.length>=10){alert("الغرفة ممتلئة");return}
+ players.push("لاعب "+(players.length+1));
+ renderPlayers();
+}
+
+function copyCode(){
+ navigator.clipboard.writeText(room);
+ alert("تم نسخ رمز الغرفة");
+}
+</script>
+</body>
+</html>
